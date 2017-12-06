@@ -230,13 +230,10 @@ load_payments_data <- function(){
   library(googlesheets)
   
   ##A. Get monthly sheets
-  pd_dec1 <- getmonthlysheet("Dec 17_01_15")
-
   pd_nov1 <- getmonthlysheet("PaymentReconciliationData_Nov17_01_13")
-  paymentsdata <- rbind(pd_dec1, pd_nov1)
   
   pd_nov2 <- getmonthlysheet("PaymentReconciliationData_Nov17_14_24")
-  paymentsdata <- rbind(paymentsdata, pd_nov2)
+  paymentsdata <- rbind(pd_nov2, pd_nov1)
   
   pd_nov3 <- getmonthlysheet("PaymentReconciliationData_Nov17_25_30")
   paymentsdata <- rbind(paymentsdata, pd_nov3)
@@ -524,17 +521,17 @@ load_cheques_data <- function() {
   
   
   #lastbounce
-  temp = checkdata %>% 
-    group_by(bid) %>% 
-    mutate(
-      last_bounce_date = if_else(bouncereason =="Insufficient Funds", date, NULL)
-    )
-  
-  checkdata = temp %>% 
-    group_by(bid) %>% 
-    mutate (
-      last_bounce_date = max(last_bounce_date, na.rm = T)
-    ) %>% ungroup()
+  # temp = checkdata %>% 
+  #   group_by(bid) %>% 
+  #   mutate(
+  #     last_bounce_date = if_else(bouncereason =="Insufficient Funds", date, NA)
+  #   )
+  # 
+  # checkdata = temp %>% 
+  #   group_by(bid) %>% 
+  #   mutate (
+  #     last_bounce_date = max(last_bounce_date, na.rm = T)
+  #   ) %>% ungroup()
   
   return(checkdata)
   
