@@ -178,11 +178,15 @@ fix_pmtdata <- function(db) {
   db = db %>% 
     mutate(
       paymentmode = ifelse(paymentmode == "cash", "Cash", paymentmode),
-      paymentmode = ifelse(paymentmode == "wallet", "Wallet", paymentmode))
+      paymentmode = ifelse(paymentmode == "wallet", "Wallet", paymentmode),
+      paymentmode = ifelse(paymentmode == "wallet", "Wallet", paymentmode),
+      paymentmode = ifelse(paymentmode == "WALLET", "Wallet", paymentmode),
+      paymentmode = ifelse(paymentmode == "CHEQUE", "Cheque", paymentmode),
+      paymentmode = ifelse(paymentmode == "CARD", "Card", paymentmode))
   
   db = db %>% mutate(
-    paymentmode = ifelse(paymentmode == "Credit - FundsCorner" | paymentmode == "FundsCorner" | paymentmode == "FundsCorner - PDC", "Credit - FundsCorner - PDC", paymentmode), 
-    paymentmode = ifelse(paymentmode == "FundsCorner - Cash", "Credit - FundsCorner - Cash", paymentmode)
+    paymentmode = ifelse(paymentmode == "Credit - FundsCorner" | paymentmode == "FundsCorner" | paymentmode == "FundsCorner - PDC" | paymentmode == "FUNDSCORNER_PDC", "Credit - FundsCorner - PDC", paymentmode), 
+    paymentmode = ifelse(paymentmode == "FundsCorner - Cash" | paymentmode == "FUNDSCORNER_CASH", "Credit - FundsCorner - Cash", paymentmode)
   ) 
   
   # db = db %>% 
@@ -230,10 +234,13 @@ load_payments_data <- function(){
   library(googlesheets)
   
   ##A. Get monthly sheets
-  pd_dec1 <- getmonthlysheet("Dec 17_01_15")
+  pd_dec1 <- getmonthlysheet("PaymentReconciliationData_Dec17_01_11")
+
+  pd_dec2 <- getmonthlysheet("PaymentReconciliationData_Dec17_12_21")
+  paymentsdata <- rbind(pd_dec1, pd_dec2)
 
   pd_nov1 <- getmonthlysheet("PaymentReconciliationData_Nov17_01_13")
-  paymentsdata <- rbind(pd_dec1, pd_nov1)
+  paymentsdata <- rbind(paymentsdata, pd_nov1)
   
   pd_nov2 <- getmonthlysheet("PaymentReconciliationData_Nov17_14_24")
   paymentsdata <- rbind(paymentsdata, pd_nov2)
@@ -418,7 +425,11 @@ load_payments_data <- function(){
   paymentsdata = paymentsdata %>% 
     mutate(
       paymentmode = ifelse(paymentmode == "cash", "Cash", paymentmode),
-      paymentmode = ifelse(paymentmode == "wallet", "Wallet", paymentmode))
+      paymentmode = ifelse(paymentmode == "CASH", "Cash", paymentmode),
+      paymentmode = ifelse(paymentmode == "wallet", "Wallet", paymentmode),
+      paymentmode = ifelse(paymentmode == "WALLET", "Wallet", paymentmode),
+      paymentmode = ifelse(paymentmode == "CHEQUE", "Cheque", paymentmode),
+      paymentmode = ifelse(paymentmode == "CARD", "Card", paymentmode))
   
   paymentsdata = paymentsdata %>% mutate(
     paymentmode = ifelse(paymentmode == "Credit - FundsCorner" | paymentmode == "FundsCorner" | paymentmode == "FundsCorner - PDC" | paymentmode == "FUNDSCORNER_PDC", "Credit - FundsCorner - PDC", paymentmode), 
