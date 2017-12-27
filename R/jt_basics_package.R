@@ -234,10 +234,13 @@ load_payments_data <- function(){
   library(googlesheets)
   
   ##A. Get monthly sheets
+  pd_dec3 <- getmonthlysheet("PaymentReconciliationData_Dec17_22_31")
+  
   pd_dec2 <- getmonthlysheet("PaymentReconciliationData_Dec17_12_21")
+  paymentsdata <- rbind(pd_dec2, pd_dec3)
 
   pd_dec1 <- getmonthlysheet("PaymentReconciliationData_Dec17_01_11")
-  paymentsdata <- rbind(pd_dec1, pd_dec2)
+  paymentsdata <- rbind(paymentsdata, pd_dec1)
 
   pd_nov1 <- getmonthlysheet("PaymentReconciliationData_Nov17_01_13")
   paymentsdata <- rbind(paymentsdata, pd_nov1)
